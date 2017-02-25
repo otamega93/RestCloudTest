@@ -13,6 +13,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,19 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
 import com.example.core.restservices.accounts.services.AccountResource;
-import com.example.core.restservices.accounts.services.AccountResourceAssembler;
 import com.example.core.restservices.accounts.services.AccountRestService;
 import com.example.core.webservicesrepositories.accounts.entities.Account;
 
 @RestController
 @RequestMapping("/accounts")
 public class AccountRestController {
-	
-	@Autowired
-	private AccountResourceAssembler assembler;
-
-	@Autowired
-	private PagedResourcesAssembler<Account> pageAssembler;
 	
 	@Autowired
 	protected AccountRestService accountRestService;
@@ -44,11 +38,17 @@ public class AccountRestController {
 		this.accountRestService = accountRestService;
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
-	public PagedResources<AccountResource> findAll(Pageable pageable) throws RestClientException, URISyntaxException {
+	@RequestMapping(value="/{id}", method=RequestMethod.GET) 
+	public ResponseEntity<AccountResource> findOne (@PathVariable Long id) {
 		
-		System.out.println(accountRestService.findAll(pageable).toString());
-		PagedResources<AccountResource> accounts = accountRestService.findAll(pageable);
+		return new ResponseEntity<AccountResource>(accountRestService.findOne(id), HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value="", method=RequestMethod.GET)
+	public ResponseEntity<PagedResources<AccountResource>> findAll(Pageable pageable) throws RestClientException, URISyntaxException {
+		
+		ResponseEntity<PagedResources<AccountResource>> accounts = accountRestService.findAll(pageable);
 		return accounts;
 	}
 	

@@ -1,7 +1,10 @@
 package com.example.core.restservices.accounts.services;
 
+
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.core.Relation;
+
+import com.example.core.webservicesrepositories.accounts.entities.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
